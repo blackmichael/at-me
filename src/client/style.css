@@ -134,7 +134,7 @@ th:last-child, td:last-child { padding-right: 0; }
 .omitted { margin: 15px 0 0; }
 
 .records-timeline figure { padding-top: 0; }
-.chart-scroll { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-top: 56px; overscroll-behavior-x: contain; scrollbar-color: var(--dim) var(--line); scrollbar-width: thin; }
+.chart-scroll { max-width: 100%; overflow: visible; padding-top: 56px; }
 .monthly-plot { min-width: 100%; }
 .trend-chart { position: relative; height: 160px; display: flex; align-items: end; gap: 4px; border-bottom: 1px solid var(--faint); }
 .trend-col { height: 100%; display: flex; align-items: end; flex: 1; gap: 1px; }
@@ -180,10 +180,6 @@ footer .token-wrap { max-width: min(70vw, 720px); }
   .masthead { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto; }
   .header-identity { grid-column: 1; grid-row: 1; }
   .connection { grid-column: 2; grid-row: 1; }
-}
-
-@media (pointer: coarse) {
-  .monthly-plot { min-width: max(100%, calc(var(--bucket-count) * 48px)); }
 }
 
 @media (max-width: 850px) {
