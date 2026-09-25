@@ -70,6 +70,8 @@ export class Store {
 
   private buildSnapshot() {
     const records = Object.values(this.data.records), archiveRows = this.data.events.filter(event => event.source === 'archive').length, live = this.data.events.filter(event => event.source === 'live')
+    const recentStart = Math.max(0, this.data.events.length - 100), recentCutoff = Date.now() - 24 * 60 * 60 * 1000
+    const recent = this.data.events.filter((event, index) => index >= recentStart || Date.parse(event.time) >= recentCutoff)
     const families = new Map<string, { records: number; collections: Map<string, number> }>()
     for (const record of records) {
       const family = lexiconFamily(record.collection), current = families.get(family) ?? { records: 0, collections: new Map<string, number>() }
@@ -93,7 +95,7 @@ export class Store {
       identity: this.data.identity, account: this.data.account,
       families: [...families].map(([name, value]) => ({ name, records: value.records, collections: [...value.collections].map(([name, records]) => ({ name, records })).sort((a, b) => b.records - a.records) })).sort((a, b) => b.records - a.records),
       declaredMonthly: fillMonths(declared), recentActivityDaily: recentDays(activityDays),
-      recent: this.data.events.slice(-24).reverse(), lastEventAt: this.data.events.at(-1)?.time ?? null
+      recent: recent.reverse(), lastEventAt: this.data.events.at(-1)?.time ?? null
     }
   }
 

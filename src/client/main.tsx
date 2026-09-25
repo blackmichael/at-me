@@ -215,7 +215,22 @@ function TrendData({ label, data, field, compact = false, summary }: any) {
 
 function Segment({ kind, value, max }: any) { return value > 0 ? <i className={kind} style={{ height: `${value / max * 100}%` }} /> : null }
 function Range({ data, field }: any) { return <div className="dates"><span>{data[0]?.[field] ? shortDay(data[0][field]) : '--'}</span><span>{data.at(-1)?.[field] ? shortDay(data.at(-1)[field]) : '--'}</span></div> }
-function Event({ event }: any) { const operation = event.operation ?? event.kind; return <li className="event"><time dateTime={event.time}><span>{formatEventDate(event.time)}</span><small>{formatEventTime(event.time)}</small></time><span className={`operation ${operation}`}>{operation.toUpperCase()}</span><div className="event-copy"><strong translate="no" title={event.collection ?? event.kind}>{event.collection ?? event.kind}</strong><Token label={`Copy ${event.rkey ? 'record key' : 'DID'}`} value={event.rkey ?? event.did} className="event-token" prefix={event.rkey ? 'rkey ' : 'did '} /></div><span className="seq" translate="no">{event.source}</span></li> }
+function Event({ event }: any) {
+  const [expanded, setExpanded] = useState(false)
+  const operation = event.operation ?? event.kind
+  const detailId = `event-detail-${event.seq}`
+  const hasRecord = event.record && typeof event.record === 'object'
+  return <li className={`event ${expanded ? 'expanded' : ''}`}>
+    <button type="button" className="event-trigger" aria-expanded={expanded} aria-controls={detailId} onClick={() => setExpanded(current => !current)}>
+      <span className="event-summary"><span className="event-primary"><span className={`event-operation ${operation}`}>{operation}</span><strong translate="no" title={event.collection && event.rkey ? `${event.collection}/${event.rkey}` : event.collection ?? event.kind}>{event.collection ?? event.kind}{event.rkey ? <span className="event-rkey">/{event.rkey}</span> : null}</strong></span><time dateTime={event.time}><span>{formatEventDate(event.time)}</span><small>{formatEventTime(event.time)}</small></time></span>
+      <span className="event-toggle" aria-hidden="true">{expanded ? '−' : '+'}</span>
+    </button>
+    <div id={detailId} className="event-detail" hidden={!expanded}>
+      <div className="event-detail-head"><span>record payload</span>{event.rkey ? <span translate="no">rkey {event.rkey}</span> : null}</div>
+      {hasRecord ? <pre><code>{JSON.stringify(event.record, null, 2)}</code></pre> : <p className="event-no-record">This event has no record payload.</p>}
+    </div>
+  </li>
+}
 
 function Token({ label, value, placeholder, className = '', prefix = '' }: any) {
   const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
