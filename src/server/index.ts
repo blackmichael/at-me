@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import Fastify from 'fastify'
-import { createServer as createViteServer } from 'vite'
 import { resolve } from 'node:path'
 import { Store } from './store.js'
 import { Ingester } from './ingester.js'
@@ -39,6 +38,8 @@ async function main() {
   app.get('/health', async () => ({ ok: ingester.status !== 'offline', ingestion: ingester.status, cursor: String(store.cursor), did: store.scope.did, service }))
   if (process.env.NODE_ENV !== 'production') {
     await app.register((await import('@fastify/middie')).default)
+    // Vite is a dev dependency; load it only in development so production can omit it.
+    const { createServer: createViteServer } = await import('vite')
     const vite = await createViteServer({ server: { middlewareMode: true }, appType: 'spa' })
     app.use((request, reply, next) => {
       if (request.url?.startsWith('/api/') || request.url === '/health') return next()
