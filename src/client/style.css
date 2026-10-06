@@ -136,28 +136,40 @@ th:last-child, td:last-child { padding-right: 0; }
 .records-timeline figure { padding-top: 0; }
 .chart-scroll { max-width: 100%; overflow: visible; padding-top: 56px; }
 .monthly-plot { min-width: 100%; }
-.trend-chart { position: relative; height: 160px; display: flex; align-items: end; gap: 4px; border-bottom: 1px solid var(--faint); }
-.trend-col { height: 100%; display: flex; align-items: end; flex: 1; gap: 1px; }
+.activity-chart-wrap { padding-top: 56px; }
+.trend-chart { position: relative; height: 160px; display: flex; align-items: end; gap: 4px; border-bottom: 1px solid var(--faint); padding-left: 32px; }
+.chart-grid { position: absolute; z-index: 0; inset: 0; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+.chart-grid i { border-top: 1px solid rgba(117, 173, 130, .2); }
+.trend-col { position: relative; z-index: 1; height: 100%; display: flex; align-items: end; flex: 1; gap: 1px; }
 .trend-col i { min-height: 2px; display: block; flex: 1; }
 .trend-chart.single .trend-col i, .trend-col .create, .legend-dot.create { background: var(--green); }
 .trend-col .update, .legend-dot.update { background: var(--amber); }
 .trend-col .delete, .legend-dot.delete { background: var(--danger); }
 .trend-col .marker, .legend-dot.marker { background: var(--dim); }
-.month-bar { position: relative; appearance: none; min-width: 0; border: 0; border-radius: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; }
-.month-bar:hover { background: rgba(92, 255, 138, .05); }
-.month-bar:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
-.month-bar.selected { box-shadow: inset 0 -3px var(--bright); }
-.month-bar i { transition: filter .15s ease, background-color .15s ease; }
-.month-bar:hover i, .month-bar:focus-visible i, .month-bar.selected i { background: var(--bright); filter: drop-shadow(0 0 4px var(--green)); }
+.month-bar, .day-bar { position: relative; appearance: none; min-width: 0; border: 0; border-radius: 0; padding: 0; background: transparent; color: inherit; cursor: pointer; }
+.month-bar:hover, .day-bar:hover { background: rgba(92, 255, 138, .05); }
+.month-bar:focus-visible, .day-bar:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+.month-bar.selected, .day-bar.selected { box-shadow: inset 0 -3px var(--bright); }
+.month-bar i, .day-bar i { transition: filter .15s ease, background-color .15s ease; }
+.month-bar:hover i, .month-bar:focus-visible i, .month-bar.selected i, .day-bar:hover i, .day-bar:focus-visible i, .day-bar.selected i { background: var(--bright); filter: drop-shadow(0 0 4px var(--green)); }
 .chart-tooltip { position: absolute; z-index: 2; left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); width: max-content; max-width: 190px; display: grid; gap: 3px; border: 1px solid var(--green); padding: 8px 9px; background: #07150b; color: var(--bright); box-shadow: 0 4px 16px rgba(0, 0, 0, .45); text-align: left; pointer-events: none; }
 .chart-tooltip strong { font-size: 11px; font-weight: 600; }
 .chart-tooltip small { color: var(--dim); font-size: 10px; white-space: nowrap; }
 .tooltip-start .chart-tooltip { left: 0; transform: none; }
 .tooltip-end .chart-tooltip { right: 0; left: auto; transform: none; }
-.y-label { position: absolute; z-index: 1; left: 0; padding-right: 4px; background: #020604; color: var(--dim); font-size: 9px; line-height: 1; pointer-events: none; }
+.day-tooltip { position: absolute; z-index: 3; left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); width: max-content; max-width: 220px; display: grid; gap: 3px; border: 1px solid var(--green); padding: 8px 9px; background: #07150b; color: var(--bright); box-shadow: 0 4px 16px rgba(0, 0, 0, .45); text-align: left; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .15s ease, visibility .15s ease; }
+.day-bar:hover .day-tooltip, .day-bar:focus-visible .day-tooltip, .day-bar.selected .day-tooltip { opacity: 1; visibility: visible; }
+.day-tooltip strong { font-size: 11px; font-weight: 600; }
+.day-tooltip small, .day-breakdown { color: var(--dim); font-size: 10px; }
+.day-breakdown { line-height: 1.4; white-space: normal; }
+.tooltip-start .day-tooltip { left: 0; transform: none; }
+.tooltip-end .day-tooltip { right: 0; left: auto; transform: none; }
+.y-label { position: absolute; z-index: 2; left: 0; padding-right: 4px; background: #020604; color: var(--dim); font-size: 9px; line-height: 1; pointer-events: none; }
 .y-max { top: 0; }
+.y-mid { top: 50%; transform: translateY(-50%); }
 .y-zero { bottom: 4px; }
-.x-axis { display: flex; justify-content: space-between; gap: 8px; padding-top: 9px; color: var(--dim); font-size: 10px; line-height: 1; }
+.x-axis { display: flex; justify-content: space-between; gap: 8px; padding: 9px 0 0 32px; color: var(--dim); font-size: 10px; line-height: 1; white-space: nowrap; }
+.activity-axis { margin-top: 1px; }
 .dates { display: flex; justify-content: space-between; margin-top: 8px; color: var(--dim); font-size: 10px; }
 .legend { display: flex; flex-wrap: wrap; gap: 10px 15px; margin-top: 16px; color: var(--dim); font-size: 10px; }
 .legend-dot { width: 7px; height: 7px; display: inline-block; margin-right: 5px; }

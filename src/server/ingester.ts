@@ -1,5 +1,6 @@
 import { Jetstream } from '@bsky/jetstream'
 import type { ActivityEvent, Source, Store } from './store.js'
+import type { TypedEvent } from '@bsky/jetstream'
 
 export type IngestionStatus = 'backfilling' | 'streaming' | 'retrying' | 'offline'
 
@@ -15,11 +16,11 @@ export class Ingester {
     const client = new Jetstream({ service: this.service, apiKey: this.apiKey, validateWire: true })
     try {
       this.setStatus('backfilling')
-      for await (const event of client.snapshot({ dids: [this.did as `did:${string}:${string}`], afterSeq: this.store.cursor, onError: error => console.error('Jetstream snapshot warning:', error) })) this.accept(event as any, 'archive')
+      for await (const event of client.snapshot({ dids: [this.did as `did:${string}:${string}`], afterSeq: this.store.cursor, onError: error => console.error('Jetstream snapshot warning:', error) })) this.accept(event, 'archive')
       this.store.beginLive(new Date().toISOString())
       this.setStatus('streaming')
       const cursor = { load: async () => this.store.cursor, save: async () => undefined }
-      for await (const event of client.live({ dids: [this.did as `did:${string}:${string}`], cursor, onError: error => console.error('Jetstream live warning:', error), onInfo: info => console.warn('Jetstream live advisory:', info) })) this.accept(event as any, 'live')
+      for await (const event of client.live({ dids: [this.did as `did:${string}:${string}`], cursor, onError: error => console.error('Jetstream live warning:', error), onInfo: info => console.warn('Jetstream live advisory:', info) })) this.accept(event, 'live')
     } catch (error) {
       this.setStatus('retrying')
       console.error('Jetstream transport stopped:', error)
@@ -27,14 +28,17 @@ export class Ingester {
     }
   }
 
-  private accept(event: any, source: Source) { const normalized = normalize(event, source); if (this.store.add(normalized)) this.eventListeners.forEach(listener => listener(normalized)) }
+  private accept(event: TypedEvent, source: Source) { const normalized = normalize(event, source); if (this.store.add(normalized)) this.eventListeners.forEach(listener => listener(normalized)) }
   private setStatus(status: IngestionStatus) { this.status = status; this.statusListeners.forEach(listener => listener(status)) }
 }
 
-function normalize(evt: any, source: Source): ActivityEvent {
-  if (!evt.time || Number.isNaN(Date.parse(evt.time))) throw new Error(`Jetstream event ${evt.seq} has no valid envelope time`)
-  const base = { seq: Number(evt.seq), time: evt.time, did: evt.did, kind: evt.kind, source } as const
-  if (evt.kind === 'commit') return { ...base, operation: evt.commit.operation, collection: evt.commit.collection, rkey: evt.commit.rkey, record: evt.commit.record, cid: evt.commit.cid, rev: evt.commit.rev }
+function normalize(evt: TypedEvent, source: Source): ActivityEvent {
+  const base = { seq: evt.seq, time: evt.time, did: evt.did, kind: evt.kind, source }
+  if (evt.kind === 'commit') {
+    const commit = evt.commit
+    const event = { ...base, operation: commit.operation, collection: commit.collection, rkey: commit.rkey, rev: commit.rev }
+    return commit.operation === 'delete' ? event : { ...event, record: commit.record, cid: commit.cid }
+  }
   if (evt.kind === 'identity') return { ...base, handle: evt.identity.handle }
   if (evt.kind === 'account') return { ...base, active: evt.account.active, status: evt.account.status }
   return { ...base, rev: evt.sync.rev }

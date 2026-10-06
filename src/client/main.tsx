@@ -156,7 +156,8 @@ function DeclaredTrend({ data }: any) {
       <div className="chart-scroll" ref={chartRef}>
         <div className="monthly-plot" style={plotStyle}>
           <div className="trend-chart single" aria-label="Monthly record counts">
-            <span className="y-label y-max" aria-hidden="true">{exact(max)}</span><span className="y-label y-zero" aria-hidden="true">0</span>
+            {data.length ? <><div className="chart-grid" aria-hidden="true"><i /><i /><i /></div>
+            <span className="y-label y-max" aria-hidden="true">{exact(max)}</span><span className="y-label y-mid" aria-hidden="true">{exact(max / 2)}</span><span className="y-label y-zero" aria-hidden="true">0</span></> : null}
             {data.map((bucket: any, index: number) => {
               const selectedBar = selected === index
               const tooltipId = `month-tooltip-${index}`
@@ -189,16 +190,55 @@ function DeclaredTrend({ data }: any) {
 }
 
 function LiveTrend({ data }: any) {
+  const [selectedDay, setSelectedDay] = useState<number | null>(null)
+  const chartRef = useRef<HTMLDivElement>(null)
   const max = Math.max(...data.map((bucket: any) => bucket.count), 1)
   const total = data.reduce((sum: number, bucket: any) => sum + bucket.count, 0)
+  const labelIndexes = axisIndexes(data.length)
+
+  useEffect(() => {
+    if (selectedDay === null) return
+    const dismissKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedDay(null)
+    }
+    const dismissPointer = (event: PointerEvent) => {
+      if (chartRef.current && !chartRef.current.contains(event.target as Node)) setSelectedDay(null)
+    }
+    window.addEventListener('keydown', dismissKey)
+    document.addEventListener('pointerdown', dismissPointer)
+    return () => { window.removeEventListener('keydown', dismissKey); document.removeEventListener('pointerdown', dismissPointer) }
+  }, [selectedDay])
+
   return <article className="module trend">
-    <ModuleHead title="Recent activity" note="last 14 days" />
+    <ModuleHead title="Recent activity" note={`${exact(total)} record changes in the last ${data.length} days`} />
     <figure>
-      <div className="trend-chart" aria-hidden="true">{data.map((bucket: any) => <div className="trend-col" key={bucket.day}><Segment kind="create" value={bucket.creates} max={max} /><Segment kind="update" value={bucket.updates} max={max} /><Segment kind="delete" value={bucket.deletes} max={max} /><Segment kind="marker" value={bucket.markers} max={max} /></div>)}</div>
-      <figcaption>{`${exact(total)} record changes in the displayed period. Empty dates render as zero.`}</figcaption>
+      <div className="activity-chart-wrap" ref={chartRef}>
+        <div className="trend-chart" aria-label="Daily record changes">
+          {data.length ? <><div className="chart-grid"><i /><i /><i /></div>
+          <span className="y-label y-max">{exact(max)}</span><span className="y-label y-mid">{exact(max / 2)}</span><span className="y-label y-zero">0</span></> : null}
+          {data.map((bucket: any, index: number) => {
+            const selectedBar = selectedDay === index
+            const tooltipId = `day-tooltip-${index}`
+            const edge = index < 3 ? 'tooltip-start' : index >= data.length - 3 ? 'tooltip-end' : ''
+            return <button
+              type="button"
+              className={`trend-col day-bar ${selectedBar ? 'selected' : ''} ${edge}`}
+              key={bucket.day}
+              aria-label={`${dayName(bucket.day)}: ${exact(bucket.count)} total, ${exact(bucket.creates)} creates, ${exact(bucket.updates)} updates, ${exact(bucket.deletes)} deletes, ${exact(bucket.markers)} markers`}
+              aria-pressed={selectedBar}
+              aria-describedby={selectedBar ? tooltipId : undefined}
+              onFocus={() => setSelectedDay(index)}
+              onClick={() => setSelectedDay(current => current === index ? null : index)}
+            >
+              <Segment kind="create" value={bucket.creates} max={max} /><Segment kind="update" value={bucket.updates} max={max} /><Segment kind="delete" value={bucket.deletes} max={max} /><Segment kind="marker" value={bucket.markers} max={max} />
+              <span id={tooltipId} className="day-tooltip" role="tooltip"><strong>{dayName(bucket.day)}</strong><small>{exact(bucket.count)} total</small><span className="day-breakdown">create {exact(bucket.creates)} / update {exact(bucket.updates)} / delete {exact(bucket.deletes)} / marker {exact(bucket.markers)}</span></span>
+            </button>
+          })}
+        </div>
+      </div>
+      <div className="x-axis activity-axis" aria-hidden="true">{labelIndexes.map(index => <span key={data[index].day}>{shortDay(data[index].day)}</span>)}</div>
     </figure>
-    <Range data={data} field="day" />
-    <div className="legend"><span><i className="legend-dot create" /> create</span><span><i className="legend-dot update" /> update</span><span><i className="legend-dot delete" /> delete</span><span><i className="legend-dot marker" /> marker</span></div>
+    <div className="legend"><span><i className="legend-dot create" aria-hidden="true" /> create</span><span><i className="legend-dot update" aria-hidden="true" /> update</span><span><i className="legend-dot delete" aria-hidden="true" /> delete</span><span><i className="legend-dot marker" aria-hidden="true" /> marker</span></div>
     <TrendData label="Record changes by day" data={data} field="day" summary="View Activity Table" />
   </article>
 }
@@ -214,7 +254,6 @@ function TrendData({ label, data, field, compact = false, summary }: any) {
 }
 
 function Segment({ kind, value, max }: any) { return value > 0 ? <i className={kind} style={{ height: `${value / max * 100}%` }} /> : null }
-function Range({ data, field }: any) { return <div className="dates"><span>{data[0]?.[field] ? shortDay(data[0][field]) : '--'}</span><span>{data.at(-1)?.[field] ? shortDay(data.at(-1)[field]) : '--'}</span></div> }
 function Event({ event }: any) {
   const [expanded, setExpanded] = useState(false)
   const operation = event.operation ?? event.kind

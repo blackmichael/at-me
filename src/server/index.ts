@@ -8,7 +8,7 @@ import { Ingester } from './ingester.js'
 const port = Number(process.env.PORT ?? 3333)
 const targetHandle = process.env.TARGET_HANDLE ?? 'michael.bsky.team'
 const service = process.env.JETSTREAM_SERVICE ?? 'https://jetstream.us-east.bsky.network'
-const app = Fastify({ logger: false })
+const app = Fastify({ logger: true })
 const clients = new Set<NodeJS.WritableStream>()
 let profile: any = { handle: targetHandle }
 let store: Store
@@ -34,7 +34,7 @@ async function main() {
     response.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive', 'Access-Control-Allow-Origin': '*' })
     response.write(`data: ${JSON.stringify({ type: 'snapshot', profile, service, ingestion: ingester.status, snapshot: store.snapshot() })}\n\n`)
     clients.add(response)
-    request.raw.on('close', () => clients.delete(response))
+    response.on('close', () => clients.delete(response))
   })
   app.get('/health', async () => ({ ok: ingester.status !== 'offline', ingestion: ingester.status, cursor: String(store.cursor), did: store.scope.did, service }))
   if (process.env.NODE_ENV !== 'production') {
