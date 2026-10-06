@@ -53,3 +53,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Trigger Deployment
+        if: github.ref == 'refs/heads/main'
+        run: |
+          gh api repos/blackmichael/homepi/dispatches \
+            -f event_type=deploy-homepi \
+            -f 'client_payload[source_repo]=${{ github.repository }}'
+        env:
+          GH_TOKEN: ${{ secrets.HOMEPI_DISPATCH_TOKEN }}
