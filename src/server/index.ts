@@ -5,7 +5,7 @@ import { resolve } from 'node:path'
 import { Store } from './store.js'
 import { Ingester } from './ingester.js'
 
-const port = Number(process.env.PORT ?? 3333)
+const port = Number(process.env.PORT ?? 3000)
 const targetHandle = process.env.TARGET_HANDLE ?? 'michael.bsky.team'
 const service = process.env.JETSTREAM_SERVICE ?? 'https://jetstream.us-east.bsky.network'
 const app = Fastify({ logger: true })
