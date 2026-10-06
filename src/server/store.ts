@@ -29,7 +29,7 @@ export class Store {
         renameSync(path, backup)
         this.data = { version: 2, scope: expected, cursor: 0, events: [], records: {} }
       } else if (loaded.scope.did !== expected.did || loaded.scope.service !== expected.service) {
-        throw new Error(`Stored data belongs to ${loaded.scope.did} at ${loaded.scope.service}; use a separate DATABASE_PATH for ${expected.did}.`)
+        throw new Error(`Stored data belongs to ${loaded.scope.did} at ${loaded.scope.service}; remove or move data/at-me.db before switching to ${expected.did}.`)
       } else this.data = loaded as Disk
     }
     this.seen = new Set(this.data.events.map(event => event.seq))

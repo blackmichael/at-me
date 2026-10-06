@@ -7,7 +7,7 @@ import { Ingester } from './ingester.js'
 const port = Number(process.env.PORT ?? 3000)
 const targetHandle = process.env.TARGET_HANDLE ?? 'michael.bsky.team'
 const service = process.env.JETSTREAM_SERVICE ?? 'https://jetstream.us-east.bsky.network'
-const app = Fastify({ logger: true })
+const app = Fastify({ logger: { timestamp: () => `,"time":"${new Date().toISOString()}"` } })
 const clients = new Set<NodeJS.WritableStream>()
 let profile: any = { handle: targetHandle }
 let store: Store
@@ -18,10 +18,10 @@ async function main() {
   const identity = await fetch(`https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=${encodeURIComponent(targetHandle)}`)
   if (!identity.ok) throw new Error(`Could not resolve ${targetHandle}: ${identity.status}`)
   const { did } = await identity.json() as { did: string }
-  store = new Store(process.env.DATABASE_PATH ?? './data/at-me.db', { did, service })
-  try { const response = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`); if (response.ok) profile = await response.json() } catch (error) { console.warn('Profile display fetch failed:', error) }
+  store = new Store('./data/at-me.db', { did, service })
+  try { const response = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`); if (response.ok) profile = await response.json() } catch (error) { app.log.warn({ err: error }, 'Profile display fetch failed') }
   profile = { ...profile, handle: profile.handle ?? targetHandle, did }
-  ingester = new Ingester(store, service, process.env.JETSTREAM_API_KEY, profile.did)
+  ingester = new Ingester(store, service, process.env.JETSTREAM_API_KEY, profile.did, app.log)
   const broadcast = () => { broadcastTimer = undefined; const message = `data: ${JSON.stringify({ type: 'snapshot', profile, service, ingestion: ingester.status, snapshot: store.snapshot() })}\n\n`; clients.forEach(client => client.write(message)) }
   const scheduleBroadcast = () => { if (!broadcastTimer) broadcastTimer = setTimeout(broadcast, 250) }
   ingester.onEvent(event => { if (event.kind === 'identity' && event.handle) profile = { ...profile, handle: event.handle }; scheduleBroadcast() })
@@ -47,7 +47,7 @@ async function main() {
     })
   } else await app.register((await import('@fastify/static')).default, { root: resolve('dist'), wildcard: false })
   await app.listen({ port, host: '0.0.0.0' })
-  console.log(`Atmosphere Identity online at http://localhost:${port}`)
+  app.log.info({ port }, 'Atmosphere Identity online')
 }
-void main()
+void main().catch(error => { app.log.fatal({ err: error }, 'Service startup failed'); process.exitCode = 1 })
 process.on('SIGINT', () => { store.close(); process.exit(0) })
