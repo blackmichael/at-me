@@ -54,6 +54,8 @@ h2 { margin: 8px 0 0; color: var(--bright); font-size: 15px; font-weight: 500; l
 .identity { padding-bottom: 34px; border-bottom: 1px solid var(--faint); }
 .identity-grid { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
 .identity-grid > *, .terminal-head > *, footer > * { min-width: 0; }
+.identity-profile { min-width: 0; display: flex; align-items: center; gap: clamp(16px, 3vw, 28px); }
+.profile-avatar { width: clamp(64px, 10vw, 96px); aspect-ratio: 1; flex: none; border: 1px solid var(--faint); border-radius: 50%; object-fit: cover; }
 .identity-copy { min-width: 0; overflow-wrap: anywhere; }
 .identity h2 { margin: 0 0 10px; color: var(--bright); font-size: clamp(30px, 5vw, 56px); font-weight: 400; letter-spacing: -.08em; line-height: 1.1; }
 .handle { margin: 0; color: var(--green); font-size: 15px; }

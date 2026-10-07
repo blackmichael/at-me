@@ -54,7 +54,8 @@ function App() {
     </header>
     <main id="content">
       <section className="identity" aria-labelledby="identity-title">
-        <div className="identity-grid">
+        <div className="identity-profile">
+          {profile.avatar ? <img className="profile-avatar" src={profile.avatar} alt="" /> : null}
           <div className="identity-copy">
             <h2 id="identity-title" translate="no">{profile.displayName ?? profile.handle}</h2>
             <p className="handle" translate="no">@{profile.handle}</p>

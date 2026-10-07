@@ -18,6 +18,7 @@ npm run dev
 ```
 
 Open <http://localhost:3000>. The app resolves the handle and connects to the configured Jetstream service. `JETSTREAM_API_KEY` is optional. Activity is stored in `data/at-me.db`; keep this file to retain history across restarts.
+When the public Bluesky profile includes an avatar, the dashboard shows it beside the display name and handle.
 
 ## Run with Docker
 
