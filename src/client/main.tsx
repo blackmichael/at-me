@@ -36,6 +36,10 @@ function App() {
     return () => source.close()
   }, [])
 
+  useEffect(() => {
+    if (loaded && profile.handle) document.title = profile.handle
+  }, [loaded, profile.handle])
+
   const shownFamilies = data.families.slice(0, 12)
   const omittedFamilies = data.families.length - shownFamilies.length
   const maxFamily = Math.max(...shownFamilies.map((family: any) => family.records), 1)
