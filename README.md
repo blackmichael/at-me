@@ -19,7 +19,7 @@ npm run dev
 
 Open <http://localhost:3000>. The app resolves the handle and connects to the configured Jetstream service. `JETSTREAM_API_KEY` is optional. Activity is stored in `data/at-me.db`; keep this file to retain history across restarts.
 When the public Bluesky profile includes an avatar, the dashboard shows it beside the display name and handle.
-The favicon is a charcoal `@` on a light-gray tile, outlined from [IBM Plex Sans](https://github.com/google/fonts/tree/main/ofl/ibmplexsans) (SIL Open Font License). It is a self-contained SVG with no runtime font dependency.
+The favicon is a circular monochrome badge with a transparent `@` cutout, adapting to light and dark browser themes. The letterform is outlined from [IBM Plex Sans](https://github.com/google/fonts/tree/main/ofl/ibmplexsans) (SIL Open Font License), with no runtime font dependency.
 
 ## Run with Docker
 
