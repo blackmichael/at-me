@@ -74,15 +74,6 @@ h2 { margin: 8px 0 0; color: var(--bright); font-size: 15px; font-weight: 500; l
 .register-value { color: var(--bright); font-size: 29px; font-variant-numeric: tabular-nums; }
 .register-note { color: var(--dim); font-size: 11px; line-height: 1.4; }
 
-.token-wrap, .token-placeholder { display: block; min-width: 0; max-width: 100%; }
-.token { width: 100%; min-height: 44px; display: flex; align-items: center; border: 0; padding: 5px 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: copy; }
-.token-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; user-select: text; }
-.token:hover .token-value { color: var(--bright); text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: 3px; }
-.token:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
-.token-placeholder { min-height: 44px; display: flex; align-items: center; }
-.copy-status { display: block; min-height: 0; color: var(--green); font-size: 10px; line-height: 1.4; }
-.copy-status.failed { color: var(--danger); }
-.copy-fallback { display: block; margin-top: 4px; color: var(--bright); font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; user-select: text; }
 
 .terminal-head { justify-content: space-between; gap: 20px; }
 .terminal-head h2 { margin: 0; }
@@ -187,8 +178,15 @@ th:last-child, td:last-child { padding-right: 0; }
 
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap; }
 
-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--faint); padding: 12px max(22px, calc((100vw - 1206px) / 2), env(safe-area-inset-right)) 12px max(22px, calc((100vw - 1206px) / 2), env(safe-area-inset-left)); color: var(--dim); font-size: 10px; }
-footer .token-wrap { max-width: min(70vw, 720px); }
+.site-footer { border-top: 1px solid var(--faint); background: #031007; color: var(--dim); font-size: 11px; }
+.footer-inner { width: 100%; max-width: 1250px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px 22px; }
+.footer-links { min-width: 0; display: flex; align-items: center; gap: 24px; }
+.footer-provider { min-width: 0; display: flex; align-items: center; gap: 12px; }
+.footer-description { margin: 0; color: var(--bright); font-size: 13px; line-height: 1.5; }
+.footer-source, .footer-jetstream { min-height: 44px; display: inline-flex; align-items: center; gap: 7px; color: var(--green); font-size: 11px; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.footer-external-icon { width: 12px; height: 12px; flex: none; }
+.footer-source:hover, .footer-jetstream:hover { color: var(--bright); }
+.footer-source:focus-visible, .footer-jetstream:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 
 @media (min-width: 700px) {
   .masthead { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto; }
@@ -203,6 +201,9 @@ footer .token-wrap { max-width: min(70vw, 720px); }
 @media (max-width: 700px) {
   .lower-grid { grid-template-columns: minmax(0, 1fr); }
   .namespaces { grid-column: auto; }
+  .footer-inner { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .footer-links { width: 100%; align-items: flex-start; flex-direction: column; gap: 0; }
+  .footer-provider { width: 100%; justify-content: flex-start; white-space: nowrap; }
 }
 
 @media (max-width: 560px) {
@@ -225,10 +226,10 @@ footer .token-wrap { max-width: min(70vw, 720px); }
   .module-head { align-items: flex-start; flex-direction: column; gap: 6px; margin: -16px -14px 16px; padding: 16px 14px; }
   .family-table-wrap { margin: 0 -14px; padding: 0 14px; }
   .family-table { min-width: 430px; }
-  footer { display: block; padding: 10px max(14px, env(safe-area-inset-right)) 10px max(14px, env(safe-area-inset-left)); line-height: 1.8; }
-  footer .token-wrap { max-width: 100%; }
+  .footer-inner { padding: 16px max(14px, env(safe-area-inset-right)) 12px max(14px, env(safe-area-inset-left)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+

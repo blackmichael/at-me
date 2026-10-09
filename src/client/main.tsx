@@ -4,19 +4,21 @@ import './style.css'
 
 type Snapshot = any
 // Keep every array consumed during render here; this state is used before bootstrap resolves.
-const empty: Snapshot = { cursorText: '0', records: 0, recordTypes: 0, families: [], declaredMonthly: [], recentActivityDaily: [], recent: [] }
+const empty: Snapshot = { records: 0, recordTypes: 0, families: [], declaredMonthly: [], recentActivityDaily: [], recent: [] }
+const externalLinkIcon = <svg className="footer-external-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+  <path d="M9 2.5h4.5V7M13.25 2.75 7 9" />
+  <path d="M12 9v3.5a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1H7" />
+</svg>
 
 function App() {
   const [data, setData] = useState<Snapshot>(empty)
   const [profile, setProfile] = useState<any>({ handle: 'michael.bsky.team' })
-  const [service, setService] = useState('')
   const [connection, setConnection] = useState('connecting')
   const [loaded, setLoaded] = useState(false)
 
   const apply = (next: any) => {
     if (next.snapshot) setData(next.snapshot)
     if (next.profile) setProfile(next.profile)
-    if (next.service) setService(next.service)
     if (next.ingestion) setConnection(next.ingestion)
     setLoaded(true)
   }
@@ -109,7 +111,16 @@ function App() {
       </section>
 
     </main>
-    <footer><Token label="Copy Jetstream service" value={service} placeholder="Jetstream v2" /><span translate="no">cursor {data.cursorText}</span></footer>
+    <footer className="site-footer"><div className="footer-inner">
+      <p className="footer-description">Live view of public AT Protocol activity.</p>
+      <nav className="footer-links" aria-label="Project links">
+        <div className="footer-provider">
+          <span>Powered by Jetstream</span>
+          <a className="footer-jetstream" href="https://bsky.network/docs/jetstream">Jetstream docs{externalLinkIcon}</a>
+        </div>
+        <a className="footer-source" href="https://github.com/blackmichael/at-me">View source on GitHub{externalLinkIcon}</a>
+      </nav>
+    </div></footer>
   </>
 }
 
@@ -276,23 +287,6 @@ function Event({ event }: any) {
   </li>
 }
 
-function Token({ label, value, placeholder, className = '', prefix = '' }: any) {
-  const [status, setStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
-  const timerRef = useRef<number | undefined>(undefined)
-  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current) }, [])
-  if (!value) return <span className={`token-placeholder ${className}`} translate="no">{placeholder}</span>
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(value)
-      setStatus('copied')
-    } catch {
-      setStatus('failed')
-    }
-    if (timerRef.current) clearTimeout(timerRef.current)
-    timerRef.current = window.setTimeout(() => setStatus('idle'), 2400)
-  }
-  return <span className={`token-wrap ${className}`} translate="no"><button type="button" className="token" onClick={() => void copy()} aria-label={label} title={value}><span className="token-value">{prefix}{value}</span></button><span className={`copy-status ${status}`} role="status" aria-live="polite">{status === 'copied' ? 'Copied' : status === 'failed' ? 'Copy failed. Select the full value below.' : ''}</span>{status === 'failed' ? <code className="copy-fallback">{value}</code> : null}</span>
-}
 
 function display(loaded: boolean, value: number | undefined) { return loaded ? exact(value) : '—' }
 const locales = navigator.languages?.length ? navigator.languages : [navigator.language]
