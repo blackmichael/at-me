@@ -122,9 +122,9 @@ function App() {
       <nav className="footer-links" aria-label="Project links">
         <div className="footer-provider">
           <span>Powered by Jetstream</span>
-          <a className="footer-jetstream" href="https://bsky.network/docs/jetstream">Jetstream docs{externalLinkIcon}</a>
+          <a className="footer-jetstream" href="https://bsky.network/docs/jetstream" target="_blank" rel="noopener noreferrer">Jetstream docs{externalLinkIcon}</a>
         </div>
-        <a className="footer-source" href="https://github.com/blackmichael/at-me">View source on GitHub{externalLinkIcon}</a>
+        <a className="footer-source" href="https://github.com/blackmichael/at-me" target="_blank" rel="noopener noreferrer">View source on GitHub{externalLinkIcon}</a>
       </nav>
     </div></footer>
   </>
