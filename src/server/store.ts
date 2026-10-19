@@ -45,7 +45,12 @@ export class Store {
     this.fold(event); this.cached = undefined; this.scheduleFlush(); return true
   }
 
-  beginLive(at: string) { if (!this.data.observedSince) { this.data.observedSince = at; this.cached = undefined; this.flush() } }
+  reset() {
+    this.data = { version: 2, scope: this.data.scope, cursor: 0, events: [], records: {} }
+    this.seen.clear()
+    this.cached = undefined
+    this.close()
+  }
 
   snapshot() {
     if (!this.cached || Date.now() - this.cachedAt >= 60_000) { this.cached = this.buildSnapshot(); this.cachedAt = Date.now() }

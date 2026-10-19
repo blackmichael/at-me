@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './style.css'
 
 type Snapshot = any
-// Keep every array consumed during render here; this state is used before bootstrap resolves.
+// Keep every array consumed during render here; this state is used before the first stream snapshot.
 const empty: Snapshot = { records: 0, recordTypes: 0, families: [], declaredMonthly: [], recentActivityDaily: [], recent: [] }
 const externalLinkIcon = <svg className="footer-external-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
   <path d="M9 2.5h4.5V7M13.25 2.75 7 9" />
@@ -15,28 +15,34 @@ function App() {
   const [profile, setProfile] = useState<any>({ handle: 'michael.bsky.team' })
   const [connection, setConnection] = useState('connecting')
   const [loaded, setLoaded] = useState(false)
-
-  const apply = (next: any) => {
-    if (next.snapshot) setData(next.snapshot)
-    if (next.profile) setProfile(next.profile)
-    if (next.ingestion) setConnection(next.ingestion)
-    setLoaded(true)
-  }
-  const refresh = () => {
-    setConnection('connecting')
-    return fetch('/api/bootstrap')
-      .then(response => response.ok ? response.json() : Promise.reject(response))
-      .then(apply)
-      .catch(() => setConnection('offline'))
-  }
+  const [retryGeneration, setRetryGeneration] = useState(0)
 
   useEffect(() => {
-    void refresh()
+    let active = true
+    setConnection('connecting')
     const source = new EventSource('/api/events')
-    source.onmessage = event => { try { apply(JSON.parse(event.data)) } catch { setConnection('offline') } }
-    source.onerror = () => setConnection('offline')
-    return () => source.close()
-  }, [])
+    source.onmessage = event => {
+      if (!active) return
+      try {
+        const next = JSON.parse(event.data)
+        if (next.snapshot) setData(next.snapshot)
+        if (next.profile) setProfile(next.profile)
+        if (next.ingestion) setConnection(next.ingestion)
+        setLoaded(true)
+      } catch {
+        setConnection('offline')
+      }
+    }
+    source.onerror = () => {
+      if (active) setConnection('offline')
+    }
+    return () => {
+      active = false
+      source.onmessage = null
+      source.onerror = null
+      source.close()
+    }
+  }, [retryGeneration])
 
   useEffect(() => {
     if (loaded && profile.handle) document.title = profile.handle
@@ -55,7 +61,7 @@ function App() {
       </div>
       <div className="connection">
         <span className="connection-status" role="status" aria-live="polite"><i className={`led ${connection === 'streaming' ? 'on' : ''}`} aria-hidden="true" />{statusLabel(connection)}</span>
-        {connection === 'offline' ? <button type="button" className="retry-button" onClick={() => void refresh()}>Retry Connection</button> : null}
+        {connection === 'offline' ? <button type="button" className="retry-button" onClick={() => setRetryGeneration(generation => generation + 1)}>Retry Connection</button> : null}
       </div>
     </header>
     <main id="content">
