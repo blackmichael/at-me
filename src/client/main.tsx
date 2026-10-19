@@ -143,7 +143,7 @@ function DeclaredTrend({ data }: any) {
   useEffect(() => {
     if (selected === null) return
     const dismissKey = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') setSelected(null)
+      if (event.key === 'Escape') { barRefs.current[selected]?.blur(); setSelected(null) }
     }
     const dismissPointer = (event: PointerEvent) => {
       if (chartRef.current && !chartRef.current.contains(event.target as Node)) { barRefs.current[selected]?.blur(); setSelected(null) }
@@ -163,11 +163,6 @@ function DeclaredTrend({ data }: any) {
     event.preventDefault()
     setTabStop(next)
     barRefs.current[next]?.focus()
-  }
-  const selectBar = (index: number, element: HTMLButtonElement) => {
-    setTabStop(index)
-    setSelected(current => current === index ? null : index)
-    element.scrollIntoView({ block: 'nearest', inline: 'center' })
   }
   const labelIndexes = axisIndexes(data.length)
   const plotStyle = { '--bucket-count': Math.max(data.length, 1) } as CSSProperties
@@ -193,12 +188,12 @@ function DeclaredTrend({ data }: any) {
                 aria-label={`${monthRange(bucket.month)}: ${exact(bucket.count)} records`}
                 aria-pressed={selectedBar}
                 aria-describedby={selectedBar ? tooltipId : undefined}
-                onFocus={() => setTabStop(index)}
+                onFocus={() => { setTabStop(index); setSelected(index) }}
                 onKeyDown={event => moveFocus(event, index)}
-                onClick={event => selectBar(index, event.currentTarget)}
+                onClick={event => { setTabStop(index); setSelected(index); event.currentTarget.scrollIntoView({ block: 'nearest', inline: 'center' }) }}
               >
                 <Segment value={bucket.count} max={max} />
-                {selectedBar ? <span id={tooltipId} className="chart-tooltip" role="tooltip"><strong>{exact(bucket.count)} records</strong><small>{monthRange(bucket.month)}</small></span> : null}
+                <span id={tooltipId} className="chart-tooltip" role="tooltip"><strong>{exact(bucket.count)} records</strong><small>{monthRange(bucket.month)}</small></span>
               </button>
             })}
           </div>
@@ -213,7 +208,9 @@ function DeclaredTrend({ data }: any) {
 
 function LiveTrend({ data }: any) {
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
+  const [tabStop, setTabStop] = useState(0)
   const chartRef = useRef<HTMLDivElement>(null)
+  const barRefs = useRef<Array<HTMLButtonElement | null>>([])
   const max = Math.max(...data.map((bucket: any) => bucket.count), 1)
   const total = data.reduce((sum: number, bucket: any) => sum + bucket.count, 0)
   const labelIndexes = axisIndexes(data.length)
@@ -221,15 +218,26 @@ function LiveTrend({ data }: any) {
   useEffect(() => {
     if (selectedDay === null) return
     const dismissKey = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') setSelectedDay(null)
+      if (event.key === 'Escape') { barRefs.current[selectedDay]?.blur(); setSelectedDay(null) }
     }
     const dismissPointer = (event: PointerEvent) => {
-      if (chartRef.current && !chartRef.current.contains(event.target as Node)) setSelectedDay(null)
+      if (chartRef.current && !chartRef.current.contains(event.target as Node)) { barRefs.current[selectedDay]?.blur(); setSelectedDay(null) }
     }
     window.addEventListener('keydown', dismissKey)
     document.addEventListener('pointerdown', dismissPointer)
     return () => { window.removeEventListener('keydown', dismissKey); document.removeEventListener('pointerdown', dismissPointer) }
   }, [selectedDay])
+  const moveFocus = (event: ReactKeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next = index
+    if (event.key === 'ArrowLeft') next = Math.max(0, index - 1)
+    else if (event.key === 'ArrowRight') next = Math.min(data.length - 1, index + 1)
+    else if (event.key === 'Home') next = 0
+    else if (event.key === 'End') next = data.length - 1
+    else return
+    event.preventDefault()
+    setTabStop(next)
+    barRefs.current[next]?.focus()
+  }
 
   return <article className="module trend">
     <ModuleHead title="Recent activity" note={`${exact(total)} record changes in the last ${data.length} days`} />
@@ -243,17 +251,20 @@ function LiveTrend({ data }: any) {
             const tooltipId = `day-tooltip-${index}`
             const edge = index < 3 ? 'tooltip-start' : index >= data.length - 3 ? 'tooltip-end' : ''
             return <button
+              ref={element => { barRefs.current[index] = element }}
               type="button"
               className={`trend-col day-bar ${selectedBar ? 'selected' : ''} ${edge}`}
               key={bucket.day}
+              tabIndex={(tabStop < data.length ? tabStop : 0) === index ? 0 : -1}
               aria-label={`${dayName(bucket.day)}: ${exact(bucket.count)} total, ${exact(bucket.creates)} creates, ${exact(bucket.updates)} updates, ${exact(bucket.deletes)} deletes, ${exact(bucket.markers)} markers`}
               aria-pressed={selectedBar}
               aria-describedby={selectedBar ? tooltipId : undefined}
-              onFocus={() => setSelectedDay(index)}
-              onClick={() => setSelectedDay(current => current === index ? null : index)}
+              onFocus={() => { setTabStop(index); setSelectedDay(index) }}
+              onKeyDown={event => moveFocus(event, index)}
+              onClick={() => setSelectedDay(index)}
             >
               <Segment kind="create" value={bucket.creates} max={max} /><Segment kind="update" value={bucket.updates} max={max} /><Segment kind="delete" value={bucket.deletes} max={max} /><Segment kind="marker" value={bucket.markers} max={max} />
-              <span id={tooltipId} className="day-tooltip" role="tooltip"><strong>{dayName(bucket.day)}</strong><small>{exact(bucket.count)} total</small><span className="day-breakdown">create {exact(bucket.creates)} / update {exact(bucket.updates)} / delete {exact(bucket.deletes)} / marker {exact(bucket.markers)}</span></span>
+              <span id={tooltipId} className="chart-tooltip" role="tooltip"><strong>{dayName(bucket.day)}</strong><small>{exact(bucket.count)} total</small><span className="day-breakdown">create {exact(bucket.creates)} / update {exact(bucket.updates)} / delete {exact(bucket.deletes)} / marker {exact(bucket.markers)}</span></span>
             </button>
           })}
         </div>
