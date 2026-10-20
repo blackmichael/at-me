@@ -19,6 +19,11 @@ npm run dev
 
 Open <http://localhost:3000>. The app resolves the handle and replays the configured Jetstream archive before connecting to its live tail. `data/at-me.db` is a disposable cache, not the source of truth. Keeping it speeds up restarts; deleting it while the app is stopped starts a replay from zero. Archive compaction can remove superseded operations, so a rebuild restores retained Jetstream data, not an exhaustive audit history.
 When the public Bluesky profile includes an avatar, the dashboard shows it beside the display name and handle.
+The header's Theme picker changes the dashboard colors and remembers the selection in this browser. Available palettes include Terminal Green, Tokyo Night, JetBrains Darcula, Nord, Gruvbox Dark, Solarized Dark, One Dark, Rosé Pine Moon, Cyberdream, Synthwave '84, Fruit Static, Radioactive Lagoon, and Clown Nebula.
+Theme text and accents maintain at least 5:1 contrast across their surfaces; component borders maintain at least 3.5:1.
+Fruit Static, Radioactive Lagoon, and Clown Nebula are original high-saturation palettes.
+JetBrains Darcula is an independent, accessibility-adjusted palette adaptation; it is not an official JetBrains theme or endorsement. Palette references: [JetBrains Darcula](https://github.com/codemirror/codemirror5/blob/master/theme/darcula.css), [Rosé Pine Moon](https://github.com/rose-pine/windows-terminal/blob/main/rose-pine-moon.scheme.json), [Cyberdream](https://github.com/scottmckendry/cyberdream.nvim/blob/main/lua/cyberdream/colors.lua), and [Synthwave '84](https://github.com/robb0wen/synthwave-vscode/blob/master/themes/synthwave-color-theme.json).
+
 The favicon is a circular monochrome badge with a transparent `@` cutout, adapting to light and dark browser themes. The browser tab title uses the resolved profile handle, so it appears beside the `@` favicon. The letterform is outlined from [IBM Plex Sans](https://github.com/google/fonts/tree/main/ofl/ibmplexsans) (SIL Open Font License), with no runtime font dependency.
 
 ## Run with Docker

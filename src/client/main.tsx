@@ -5,6 +5,32 @@ import './style.css'
 type Snapshot = any
 // Keep every array consumed during render here; this state is used before the first stream snapshot.
 const empty: Snapshot = { records: 0, recordTypes: 0, families: [], declaredMonthly: [], recentActivityDaily: [], recent: [] }
+const themes = ['terminal-green', 'tokyo-night', 'jetbrains-darcula', 'nord', 'gruvbox-dark', 'solarized-dark', 'one-dark', 'rose-pine-moon', 'cyberdream', 'synthwave-84', 'fruit-static', 'radioactive-lagoon', 'clown-nebula'] as const
+type Theme = typeof themes[number]
+const themeNames: Record<Theme, string> = {
+  'terminal-green': 'Terminal Green',
+  'tokyo-night': 'Tokyo Night',
+  'jetbrains-darcula': 'JetBrains Darcula',
+  nord: 'Nord',
+  'gruvbox-dark': 'Gruvbox Dark',
+  'solarized-dark': 'Solarized Dark',
+  'one-dark': 'One Dark',
+  'rose-pine-moon': 'Rosé Pine Moon',
+  cyberdream: 'Cyberdream',
+  'synthwave-84': "Synthwave '84",
+  'fruit-static': 'Fruit Static',
+  'radioactive-lagoon': 'Radioactive Lagoon',
+  'clown-nebula': 'Clown Nebula',
+}
+function savedTheme(): Theme {
+  try {
+    const value = localStorage.getItem('at-me-theme')
+    if (value === 'catppuccin-mocha') return 'rose-pine-moon'
+    if (value === 'dracula') return 'jetbrains-darcula'
+    return themes.find(theme => theme === value) ?? 'terminal-green'
+  } catch { return 'terminal-green' }
+}
+
 const externalLinkIcon = <svg className="footer-external-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
   <path d="M9 2.5h4.5V7M13.25 2.75 7 9" />
   <path d="M12 9v3.5a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1H7" />
@@ -16,6 +42,13 @@ function App() {
   const [connection, setConnection] = useState('connecting')
   const [loaded, setLoaded] = useState(false)
   const [retryGeneration, setRetryGeneration] = useState(0)
+  const [theme, setTheme] = useState<Theme>(savedTheme)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try { localStorage.setItem('at-me-theme', theme) } catch {}
+  }, [theme])
+
 
   useEffect(() => {
     let active = true
@@ -60,6 +93,7 @@ function App() {
         <p className="header-did" translate="no">{profile.did ?? '…'}</p>
       </div>
       <div className="connection">
+        
         <span className="connection-status" role="status" aria-live="polite"><i className={`led ${connection === 'streaming' ? 'on' : ''}`} aria-hidden="true" />{statusLabel(connection)}</span>
         {connection === 'offline' ? <button type="button" className="retry-button" onClick={() => setRetryGeneration(generation => generation + 1)}>Retry Connection</button> : null}
       </div>
@@ -118,7 +152,14 @@ function App() {
 
     </main>
     <footer className="site-footer"><div className="footer-inner">
-      <p className="footer-description">Live view of public AT Protocol activity.</p>
+      <div className="footer-about">
+        <p className="footer-description">Live view of public AT Protocol activity.</p>
+        <label className="footer-theme">Color theme
+          <select value={theme} onChange={event => setTheme(event.target.value as Theme)} aria-label="Color theme">
+            {themes.map(value => <option key={value} value={value}>{themeNames[value]}</option>)}
+          </select>
+        </label>
+      </div>
       <nav className="footer-links" aria-label="Project links">
         <div className="footer-provider">
           <span>Powered by Jetstream</span>
@@ -126,6 +167,7 @@ function App() {
         </div>
         <a className="footer-source" href="https://github.com/blackmichael/at-me" target="_blank" rel="noopener noreferrer">View source on GitHub{externalLinkIcon}</a>
       </nav>
+
     </div></footer>
   </>
 }
