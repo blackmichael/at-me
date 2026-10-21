@@ -4,7 +4,7 @@ A self-hosted dashboard for an AT Protocol account. It replays repository events
 
 ## Run locally
 
-Requires Node.js 22.15 or newer.
+Requires Node.js 22.23.4 or newer.
 
 ```sh
 npm install
