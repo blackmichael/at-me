@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#12301e" stroke-width="1"/>
+    </pattern>
+    <pattern id="scan" width="1" height="5" patternUnits="userSpaceOnUse">
+      <path d="M0 0h1" stroke="#8cffaa" stroke-opacity=".08"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#020604"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity=".5"/>
+  <rect width="1200" height="630" fill="url(#scan)"/>
+  <path d="M0 44H1200M0 586H1200" stroke="#17422a"/>
+  <g fill="#75ad82" font-family="'IBM Plex Mono',monospace" font-size="14" letter-spacing="1.4">
+    <text x="74" y="31">AT PROTOCOL / IDENTITY OBSERVER</text>
+    <text x="1126" y="31" text-anchor="end">LIVE REPOSITORY VIEW</text>
+  </g>
+  <g transform="translate(74 108)">
+    <rect width="56" height="56" rx="12" fill="#07170c" stroke="#28633a"/>
+    <path d="M28 7a21 21 0 1 0 0 42 21 21 0 0 0 0-42Zm-.2 35.1h7.4v2.4h-7.4c-9 0-15.1-6.5-15.1-16.8 0-10.4 6.1-17.1 15.4-17.1 9 0 15.6 5.9 15.6 15.6 0 6.7-2.5 10.6-7.3 10.6-2.7 0-4.2-1.5-4.4-4.1h-.2c-1.3 2.6-3.4 4.1-6.3 4.1-4.8 0-7.8-3.7-7.8-9.5 0-5.7 3-9.4 7.8-9.4 2.8 0 4.7 1.4 5.8 3.3v-2.8h2.8v13.2c0 1.6.7 2.4 2.2 2.4 2.6 0 4.3-2.8 4.3-7.5 0-8.2-5.1-13.3-12.7-13.3-7.7 0-12.5 5.4-12.5 14.4 0 9 4.7 14.5 12.2 14.5Zm0-7.9c3.5 0 5.4-2.2 5.4-5.7v-1.8c0-3.6-1.9-5.8-5.4-5.8s-5.2 2.2-5.2 5.8v1.7c0 3.6 1.8 5.8 5.2 5.8Z" fill="#5cff8a" transform="translate(0 0) scale(1.33) translate(-7 -7)"/>
+    <circle cx="46" cy="10" r="3" fill="#d5ffe0"/>
+  </g>
+  <g font-family="'IBM Plex Mono',monospace">
+    <text x="74" y="272" fill="#d5ffe0" font-size="58" font-weight="600" letter-spacing="-2">ATMOSPHERE</text>
+    <text x="74" y="342" fill="#5cff8a" font-size="58" font-weight="600" letter-spacing="-2">IDENTITY</text>
+    <path d="M74 380h506" stroke="#28633a" stroke-width="2"/>
+    <text x="74" y="424" fill="#b8ffc9" font-size="20">A live window into a Bluesky identity</text>
+    <text x="74" y="456" fill="#75ad82" font-size="17">Profile signals, repository records, and the stream as it moves.</text>
+  </g>
+  <g transform="translate(704 106)">
+    <rect width="422" height="420" rx="8" fill="#031007" stroke="#28633a"/>
+    <path d="M0 48h422" stroke="#28633a"/>
+    <circle cx="23" cy="24" r="5" fill="#5cff8a"/>
+    <text x="40" y="29" fill="#b8ffc9" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1">IDENTITY / REPOSITORY</text>
+    <g transform="translate(211 181)" fill="none" stroke-linecap="round">
+      <circle r="102" stroke="#17422a" stroke-width="1"/>
+      <circle r="78" stroke="#28633a" stroke-width="1" stroke-dasharray="2 8"/>
+      <circle r="50" stroke="#17422a" stroke-width="1"/>
+      <path d="M-132 0H132M0-132V132" stroke="#12301e"/>
+      <path d="M-86-52 0-100 91-46 78 58 0 98-89 51Z" stroke="#5cff8a" stroke-width="2"/>
+      <path d="M-86-52 0 0 91-46M0 0 78 58M0 0 0-100M0 0-89 51" stroke="#28633a" stroke-width="1.5"/>
+      <circle r="25" fill="#07170c" stroke="#5cff8a" stroke-width="2"/>
+      <circle cx="0" cy="-100" r="7" fill="#d5ffe0" stroke="#020604" stroke-width="3"/>
+      <circle cx="91" cy="-46" r="7" fill="#5cff8a" stroke="#020604" stroke-width="3"/>
+      <circle cx="78" cy="58" r="7" fill="#5cff8a" stroke="#020604" stroke-width="3"/>
+      <circle cx="0" cy="98" r="7" fill="#d5ffe0" stroke="#020604" stroke-width="3"/>
+      <circle cx="-89" cy="51" r="7" fill="#5cff8a" stroke="#020604" stroke-width="3"/>
+      <circle cx="-86" cy="-52" r="7" fill="#d5ffe0" stroke="#020604" stroke-width="3"/>
+      <circle r="5" fill="#5cff8a" stroke="none"/>
+    </g>
+    <path d="M24 326h374" stroke="#17422a"/>
+    <g fill="#75ad82" font-family="'IBM Plex Mono',monospace" font-size="12">
+      <text x="24" y="352">PROFILE</text><text x="153" y="352">LEXICONS</text><text x="282" y="352">EVENTS</text>
+    </g>
+    <g fill="#5cff8a">
+      <circle cx="32" cy="378" r="3"/><circle cx="161" cy="378" r="3"/><circle cx="290" cy="378" r="3"/>
+    </g>
+    <path d="M42 378h60M171 378h60M300 378h72" stroke="#28633a" stroke-width="2"/>
+  </g>
+  <text x="74" y="612" fill="#4e705a" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1.2">AT.MICHAELBLACK.XYZ</text>
+  <text x="1126" y="612" text-anchor="end" fill="#4e705a" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1.2">IDENTITY IN MOTION</text>
+</svg>
