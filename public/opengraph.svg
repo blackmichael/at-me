@@ -12,7 +12,7 @@
   <rect width="1200" height="630" fill="url(#scan)"/>
   <path d="M0 44H1200M0 586H1200" stroke="#17422a"/>
   <g fill="#75ad82" font-family="'IBM Plex Mono',monospace" font-size="14" letter-spacing="1.4">
-    <text x="74" y="31">AT PROTOCOL / IDENTITY OBSERVER</text>
+    <text x="74" y="31">AT PROTOCOL / ACCOUNT DASHBOARD</text>
     <text x="1126" y="31" text-anchor="end">LIVE REPOSITORY VIEW</text>
   </g>
   <g transform="translate(74 108)">
@@ -22,16 +22,16 @@
   </g>
   <g font-family="'IBM Plex Mono',monospace">
     <text x="74" y="272" fill="#d5ffe0" font-size="58" font-weight="600" letter-spacing="-2">ATMOSPHERE</text>
-    <text x="74" y="342" fill="#5cff8a" font-size="58" font-weight="600" letter-spacing="-2">IDENTITY</text>
+    <text x="74" y="342" fill="#5cff8a" font-size="58" font-weight="600" letter-spacing="-2">DASHBOARD</text>
     <path d="M74 380h506" stroke="#28633a" stroke-width="2"/>
-    <text x="74" y="424" fill="#b8ffc9" font-size="20">A live window into a Bluesky identity</text>
+    <text x="74" y="424" fill="#b8ffc9" font-size="20">A live dashboard for a Bluesky account</text>
     <text x="74" y="456" fill="#75ad82" font-size="17">Profile signals, repository records, and the stream as it moves.</text>
   </g>
   <g transform="translate(704 106)">
     <rect width="422" height="420" rx="8" fill="#031007" stroke="#28633a"/>
     <path d="M0 48h422" stroke="#28633a"/>
     <circle cx="23" cy="24" r="5" fill="#5cff8a"/>
-    <text x="40" y="29" fill="#b8ffc9" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1">IDENTITY / REPOSITORY</text>
+    <text x="40" y="29" fill="#b8ffc9" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1">ACCOUNT / REPOSITORY</text>
     <g transform="translate(211 181)" fill="none" stroke-linecap="round">
       <circle r="102" stroke="#17422a" stroke-width="1"/>
       <circle r="78" stroke="#28633a" stroke-width="1" stroke-dasharray="2 8"/>
@@ -58,5 +58,5 @@
     <path d="M42 378h60M171 378h60M300 378h72" stroke="#28633a" stroke-width="2"/>
   </g>
   <text x="74" y="612" fill="#4e705a" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1.2">AT.MICHAELBLACK.XYZ</text>
-  <text x="1126" y="612" text-anchor="end" fill="#4e705a" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1.2">IDENTITY IN MOTION</text>
+  <text x="1126" y="612" text-anchor="end" fill="#4e705a" font-family="'IBM Plex Mono',monospace" font-size="13" letter-spacing="1.2">ACCOUNT IN MOTION</text>
 </svg>

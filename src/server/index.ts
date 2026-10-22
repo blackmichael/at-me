@@ -105,7 +105,7 @@ async function main() {
   } else await app.register(fastifyStatic, { root: resolve('dist'), wildcard: false })
   if (shuttingDown) return
   await app.listen({ port, host: '0.0.0.0' })
-  if (!shuttingDown) app.log.info({ port }, 'Atmosphere Identity online')
+  if (!shuttingDown) app.log.info({ port }, 'Atmosphere Dashboard online')
 }
 function shutdown() {
   if (shutdownTask) return shutdownTask
