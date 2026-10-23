@@ -63,7 +63,7 @@ test('Open Graph endpoint returns a current 1200x630 PNG snapshot', async t => {
   const withoutAvatar = await app.inject({ method: 'GET', url: '/opengraph.png' })
   assert.notDeepEqual(withoutAvatar.rawPayload, withAvatarResponse.rawPayload)
 
-  current = { ...current, profile: withAvatar.profile, snapshot: { ...current.snapshot, records: 1288 } }
+  current = { ...current, profile: withAvatar.profile, ingestion: 'offline' }
   const second = await app.inject({ method: 'GET', url: '/opengraph.png' })
   assert.equal(second.statusCode, 200)
   assert.notDeepEqual(second.rawPayload, withAvatarResponse.rawPayload)

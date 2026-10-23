@@ -1,5 +1,4 @@
 import { Resvg } from '@resvg/resvg-js'
-import { fileURLToPath } from 'node:url'
 import type { FastifyInstance } from 'fastify'
 
 type OpenGraphEvent = {
@@ -37,7 +36,6 @@ const avatarLimit = 512 * 1024
 const avatarCacheMs = 5 * 60_000
 let avatarCache: { url: string; expiresAt: number; value: Promise<string | undefined> } | undefined
 const statusLabels: Record<string, string> = { streaming: 'LIVE', offline: 'OFFLINE', backfilling: 'RECONSTRUCTING', retrying: 'RETRYING' }
-const fontPath = fileURLToPath(new URL('./IBMPlexMono-Regular.ttf', import.meta.url))
 
 export function registerOpenGraphRoute(app: FastifyInstance, current: () => OpenGraphState) {
   app.get('/opengraph.png', async (_request, reply) => {
@@ -45,7 +43,6 @@ export function registerOpenGraphRoute(app: FastifyInstance, current: () => Open
     const avatar = await loadAvatar(state.profile.avatar)
     const image = new Resvg(renderOpenGraphSvg(state, avatar), {
       fitTo: { mode: 'original' },
-      font: { fontFiles: [fontPath], loadSystemFonts: false, defaultFontFamily: 'IBM Plex Mono' }
     }).render().asPng()
     return reply
       .header('Content-Type', 'image/png')
@@ -78,7 +75,7 @@ export function renderOpenGraphSvg(state: OpenGraphState, avatar?: string) {
   </defs>
   <rect width="${width}" height="${height}" fill="#020604"/>
   <rect width="${width}" height="${height}" fill="url(#scanlines)"/>
-  <g font-family="'IBM Plex Mono',monospace">
+  <g font-family="monospace">
     <path d="M0 70H1200" stroke="#4e705a"/>
     <text x="56" y="43" fill="#d5ffe0" font-size="18" letter-spacing="1.4">ATMOSPHERE ACTIVITY</text>
     <circle cx="1068" cy="38" r="4" fill="${statusColor}"/>

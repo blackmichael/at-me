@@ -10,6 +10,7 @@ COPY src ./src
 RUN npm run build
 
 FROM node:22.23.4-alpine AS runtime
+RUN apk add --no-cache font-dejavu
 WORKDIR /app
 ENV NODE_ENV=production
 
