@@ -8,12 +8,12 @@
   <rect width="1200" height="630" fill="url(#scanlines)"/>
   <g font-family="'IBM Plex Mono',monospace">
     <path d="M0 70H1200" stroke="#4e705a"/>
-    <text x="56" y="43" fill="#d5ffe0" font-size="18" letter-spacing="1.4">ATMOSPHERE DASHBOARD</text>
+    <text x="56" y="43" fill="#d5ffe0" font-size="18" letter-spacing="1.4">ATMOSPHERE ACTIVITY</text>
     <text x="1144" y="42" text-anchor="end" fill="#75ad82" font-size="13">AT PROTOCOL</text>
 
     <text x="56" y="136" fill="#d5ffe0" font-size="36" letter-spacing="-1.5">michael.bsky.team</text>
     <text x="56" y="166" fill="#5cff8a" font-size="16">@michael.bsky.team</text>
-    <text x="1144" y="154" text-anchor="end" fill="#75ad82" font-size="14">LIVE VIEW OF PUBLIC AT PROTOCOL ACTIVITY</text>
+    <text x="1144" y="154" text-anchor="end" fill="#75ad82" font-size="14">A live dashboard for an AT Protocol identity</text>
 
     <rect x="56" y="194" width="1088" height="138" fill="#031007" stroke="#4e705a"/>
     <path d="M56 235H1144" stroke="#4e705a"/>

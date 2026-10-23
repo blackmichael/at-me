@@ -1,4 +1,4 @@
-# Atmosphere Dashboard
+# Atmosphere Activity
 
 A self-hosted dashboard for an AT Protocol account. It replays repository events from a Jetstream service, caches repository state locally, and updates the dashboard as new events arrive.
 

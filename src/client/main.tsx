@@ -78,7 +78,7 @@ function App() {
   }, [retryGeneration])
 
   useEffect(() => {
-    if (loaded && profile.handle) document.title = `${profile.handle} · Atmosphere Dashboard`
+    if (loaded && profile.handle) document.title = `${profile.handle} · Atmosphere Activity`
   }, [loaded, profile.handle])
 
   const shownFamilies = data.families.slice(0, 12)
@@ -89,7 +89,7 @@ function App() {
     <a className="skip" href="#content">Skip to Activity</a>
     <header className="masthead">
       <div className="header-identity">
-        <h1 className="page-title">ATMOSPHERE DASHBOARD</h1>
+        <h1 className="page-title">ATMOSPHERE ACTIVITY</h1>
         <p className="header-did" translate="no">{profile.did ?? '…'}</p>
       </div>
       <div className="connection">
