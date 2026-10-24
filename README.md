@@ -24,7 +24,7 @@ Theme text and accents maintain at least 5:1 contrast across their surfaces; com
 Fruit Static, Radioactive Lagoon, and Clown Nebula are original high-saturation palettes.
 JetBrains Darcula is an independent, accessibility-adjusted palette adaptation; it is not an official JetBrains theme or endorsement. Palette references: [JetBrains Darcula](https://github.com/codemirror/codemirror5/blob/master/theme/darcula.css), [Rosé Pine Moon](https://github.com/rose-pine/windows-terminal/blob/main/rose-pine-moon.scheme.json), [Cyberdream](https://github.com/scottmckendry/cyberdream.nvim/blob/main/lua/cyberdream/colors.lua), and [Synthwave '84](https://github.com/robb0wen/synthwave-vscode/blob/master/themes/synthwave-color-theme.json).
 
-The favicon remains the original monochrome `@` badge that adapts to light and dark browser themes. The Open Graph PNG at `/opengraph.png` is generated from the current profile and repository snapshot, including the avatar, display name, handle, valid verification, repository totals, and recent events.
+The favicon remains the original monochrome `@` badge that adapts to light and dark browser themes. The Open Graph PNG at `/opengraph.png` is a static marketing poster for Atmosphere Activity, with oversized `@` artwork and the descriptor “An AT Protocol identity activity dashboard.” It does not reproduce dashboard panels or expose account snapshots. The server rasterizes it once at startup using the existing system DejaVu fonts, with no avatar requests or additional font assets. Responses are cached for one hour in browsers and one day in shared caches.
 
 ## Run with Docker
 
