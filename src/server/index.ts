@@ -52,7 +52,7 @@ async function main() {
     lastConnectedAt: currentIngester.lastConnectedAt
   })
   const payload = () => ({ profile, service, ingestion: currentIngester.status, diagnostics: diagnostics(), snapshot: currentStore.snapshot() })
-  registerOpenGraphRoute(app, () => ({ profile, snapshot: currentStore.snapshot(), ingestion: currentIngester.status }))
+  registerOpenGraphRoute(app, profile.handle)
   const broadcast = () => {
     broadcastTimer = undefined
     if (shuttingDown) return
