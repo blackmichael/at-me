@@ -5,7 +5,7 @@ import { registerOpenGraphRoute } from './opengraph.js'
 
 test('Open Graph endpoint serves a cacheable 1200x630 PNG poster', async t => {
   const app = Fastify({ logger: false })
-  registerOpenGraphRoute(app)
+  registerOpenGraphRoute(app, 'astrid.example')
   t.after(() => app.close())
 
   const response = await app.inject({ method: 'GET', url: '/opengraph.png' })

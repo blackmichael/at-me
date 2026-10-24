@@ -28,7 +28,7 @@ The favicon retains the original `@` badge shape in the share poster's forest gr
 
 Edit `public/favicon.svg` and run `npm run icons` to regenerate the checked-in PNG, ICO, and Safari mask assets using the existing rasterizer. No font files or extra dependencies are needed.
 
-The Open Graph PNG at `/opengraph.png` is a static marketing poster for Atmosphere Activity, with oversized `@` artwork and the descriptor “An AT Protocol identity activity dashboard.” It does not reproduce dashboard panels or expose account snapshots. The server rasterizes it once at startup using the existing system DejaVu fonts, with no avatar requests or additional font assets. Responses are cached for one hour in browsers and one day in shared caches.
+The Open Graph PNG at `/opengraph.png` is a marketing poster for Atmosphere Activity, with oversized `@` artwork, the descriptor “An AT Protocol identity activity dashboard,” and the configured identity's handle as a byline. The server uses the resolved profile handle (falling back to `TARGET_HANDLE` when profile fetching is unavailable) and rasterizes the poster once at startup using the existing system DejaVu fonts. Handle changes appear after restart; repository activity is not included, and no avatar requests or additional font assets are needed. Responses are cached for one hour in browsers and one day in shared caches.
 
 ## Run with Docker
 
