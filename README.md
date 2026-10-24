@@ -1,4 +1,4 @@
-# Atmosphere Identity
+# Atmosphere Activity
 
 A self-hosted dashboard for an AT Protocol account. It replays repository events from a Jetstream service, caches repository state locally, and updates the dashboard as new events arrive.
 
@@ -24,7 +24,7 @@ Theme text and accents maintain at least 5:1 contrast across their surfaces; com
 Fruit Static, Radioactive Lagoon, and Clown Nebula are original high-saturation palettes.
 JetBrains Darcula is an independent, accessibility-adjusted palette adaptation; it is not an official JetBrains theme or endorsement. Palette references: [JetBrains Darcula](https://github.com/codemirror/codemirror5/blob/master/theme/darcula.css), [Rosé Pine Moon](https://github.com/rose-pine/windows-terminal/blob/main/rose-pine-moon.scheme.json), [Cyberdream](https://github.com/scottmckendry/cyberdream.nvim/blob/main/lua/cyberdream/colors.lua), and [Synthwave '84](https://github.com/robb0wen/synthwave-vscode/blob/master/themes/synthwave-color-theme.json).
 
-The favicon is a circular monochrome badge with a transparent `@` cutout, adapting to light and dark browser themes. The browser tab title uses the resolved profile handle, so it appears beside the `@` favicon. The letterform is outlined from [IBM Plex Sans](https://github.com/google/fonts/tree/main/ofl/ibmplexsans) (SIL Open Font License), with no runtime font dependency.
+The favicon remains the original monochrome `@` badge that adapts to light and dark browser themes. The Open Graph PNG at `/opengraph.png` is generated from the current profile and repository snapshot, including the avatar, display name, handle, valid verification, repository totals, and recent events.
 
 ## Run with Docker
 

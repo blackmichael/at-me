@@ -6,6 +6,7 @@ import type { ServerResponse } from 'node:http'
 import { resolve } from 'node:path'
 import { Store } from './store.js'
 import { Ingester } from './ingester.js'
+import { registerOpenGraphRoute } from './opengraph.js'
 
 const port = Number(process.env.PORT ?? 3000)
 const targetHandle = process.env.TARGET_HANDLE ?? 'michael.bsky.team'
@@ -51,6 +52,7 @@ async function main() {
     lastConnectedAt: currentIngester.lastConnectedAt
   })
   const payload = () => ({ profile, service, ingestion: currentIngester.status, diagnostics: diagnostics(), snapshot: currentStore.snapshot() })
+  registerOpenGraphRoute(app, () => ({ profile, snapshot: currentStore.snapshot(), ingestion: currentIngester.status }))
   const broadcast = () => {
     broadcastTimer = undefined
     if (shuttingDown) return
@@ -105,7 +107,7 @@ async function main() {
   } else await app.register(fastifyStatic, { root: resolve('dist'), wildcard: false })
   if (shuttingDown) return
   await app.listen({ port, host: '0.0.0.0' })
-  if (!shuttingDown) app.log.info({ port }, 'Atmosphere Identity online')
+  if (!shuttingDown) app.log.info({ port }, 'Atmosphere Activity online')
 }
 function shutdown() {
   if (shutdownTask) return shutdownTask
